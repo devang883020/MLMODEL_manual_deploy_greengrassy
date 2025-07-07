@@ -1,0 +1,26 @@
+---
+RecipeFormatVersion: '2020-01-25'
+ComponentName: com.devangkubde.irisml
+ComponentVersion: 1.0.${CODEBUILD_BUILD_NUMBER}
+ComponentType: aws.greengrass.docker
+ComponentDescription: ML Iris model docker container for Raspberry Pi
+ComponentPublisher: Devang Kubde
+
+Manifests:
+  - Platform:
+      os: linux
+      architecture: armv7l
+
+    Artifacts:
+      - URI: "docker://${DOCKER_USER}/iris-ml:1.0.${CODEBUILD_BUILD_NUMBER}"
+
+    Lifecycle:
+      Run: |
+        docker run --rm --name iris-ml-container \
+          -e GREENGRASS_CONTAINER_LOG_LEVEL=INFO \
+          ${DOCKER_USER}/iris-ml:1.0.${CODEBUILD_BUILD_NUMBER}
+
+ComponentConfiguration:
+  DefaultConfiguration:
+    InferenceInterval: 30
+    LogLevel: "INFO"
